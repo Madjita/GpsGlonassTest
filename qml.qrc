@@ -1,0 +1,18 @@
+<RCC>
+    <qresource prefix="/">
+        <file>np.qml</file>
+        <file>Dialog_NP.qml</file>
+        <file>ClockCircle.qml</file>
+        <file>Page3.qml</file>
+    </qresource>
+    <qresource prefix="/icon">
+        <file>ico/graph.png</file>
+        <file>ico/icoAddField.png</file>
+        <file>ico/icoReatimeScenarioPlayer32x32.png</file>
+        <file>ico/Modem.png</file>
+        <file>ico/target.png</file>
+        <file>ico/resultados.png</file>
+        <file>ico/27_2.png</file>
+        <file>logo.ico</file>
+    </qresource>
+</RCC>

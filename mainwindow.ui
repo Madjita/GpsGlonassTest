@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1772</width>
+    <height>732</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Stend</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="qml.qrc">
+    <normaloff>:/icon/logo.ico</normaloff>:/icon/logo.ico</iconset>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <item row="0" column="0">
+     <widget class="QMdiArea" name="mdiArea">
+      <property name="autoFillBackground">
+       <bool>false</bool>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="background">
+       <brush brushstyle="Dense7Pattern">
+        <color alpha="255">
+         <red>66</red>
+         <green>66</green>
+         <blue>66</blue>
+        </color>
+       </brush>
+      </property>
+      <property name="activationOrder">
+       <enum>QMdiArea::ActivationHistoryOrder</enum>
+      </property>
+      <property name="tabShape">
+       <enum>QTabWidget::Triangular</enum>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1772</width>
+     <height>21</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QToolBar" name="mainToolBar">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Vertical</enum>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>LeftToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionMode"/>
+   <addaction name="actionFind"/>
+   <addaction name="actionProverki"/>
+   <addaction name="actionResult"/>
+   <addaction name="separator"/>
+   <addaction name="actionPDF"/>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionMode">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="qml.qrc">
+     <normaloff>:/icon/ico/target.png</normaloff>:/icon/ico/target.png</iconset>
+   </property>
+   <property name="text">
+    <string>Режим</string>
+   </property>
+   <property name="toolTip">
+    <string>Выбор жтапа работы</string>
+   </property>
+  </action>
+  <action name="actionFind">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="qml.qrc">
+     <normaloff>:/icon/ico/Modem.png</normaloff>:/icon/ico/Modem.png</iconset>
+   </property>
+   <property name="text">
+    <string>Поиск устрйоств</string>
+   </property>
+   <property name="toolTip">
+    <string>Поиск устрйоств</string>
+   </property>
+  </action>
+  <action name="actionProverki">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="qml.qrc">
+     <normaloff>:/icon/ico/graph.png</normaloff>:/icon/ico/graph.png</iconset>
+   </property>
+   <property name="text">
+    <string>Проверки</string>
+   </property>
+   <property name="toolTip">
+    <string>Проверки</string>
+   </property>
+  </action>
+  <action name="actionResult">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="qml.qrc">
+     <normaloff>:/icon/ico/resultados.png</normaloff>:/icon/ico/resultados.png</iconset>
+   </property>
+   <property name="text">
+    <string>Результаты</string>
+   </property>
+   <property name="toolTip">
+    <string>Результаты</string>
+   </property>
+  </action>
+  <action name="actionPDF">
+   <property name="icon">
+    <iconset resource="qml.qrc">
+     <normaloff>:/icon/ico/27_2.png</normaloff>:/icon/ico/27_2.png</iconset>
+   </property>
+   <property name="text">
+    <string>Сгенирировать отчет</string>
+   </property>
+   <property name="toolTip">
+    <string>Сгенирировать отчет</string>
+   </property>
+  </action>
+  <action name="actionBack">
+   <property name="text">
+    <string>Назад</string>
+   </property>
+  </action>
+  <action name="actionForward">
+   <property name="text">
+    <string>Вперед</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources>
+  <include location="qml.qrc"/>
+ </resources>
+ <connections/>
+</ui>
