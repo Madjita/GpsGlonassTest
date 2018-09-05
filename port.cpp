@@ -16,7 +16,7 @@ Port::Port(QObject *parent) :
 {
     //помещаем класс в поток
     this->moveToThread(new QThread());
-    QObject::connect(this->thread(),&QThread::started,this,&Port::process_start);
+    connect(this->thread(),&QThread::started,this,&Port::process_start);
     this->thread()->start();
 
 
@@ -31,17 +31,15 @@ Port::~Port()
 
 void Port::process_start()
 {
-    //qDebug() << "QSerialPort* thisPort : create (new)";
     thisPort = new QSerialPort();
-    //qDebug() << "QSerialPort* thisPort = " << sizeof(thisPort);
-    //    thisPort->moveToThread(new QThread()); //помещаем сам порт в поток
-    //    //qDebug() << "Помещаем класс << QSerialPort >> в поток : " << thisPort->thread();
+
 
 
     qDebug("Open the port.cpp on the new Thread");
-    QObject::connect(thisPort,SIGNAL(error(QSerialPort::SerialPortError)),this,SLOT(handleError(QSerialPort::SerialPortError))); // подключаем првоерку ошибок порта
-    QObject::connect(thisPort, &QSerialPort::readyRead,this,&Port::ReadInProt); //подключаем чтение с порта по сигналу readyRead()
-    //QObject::connect(thisPort, SIGNAL(readyRead()),this,SLOT(getComData())); //подключаем чтение с порта по сигналу readyRead()
+    connect(thisPort,SIGNAL(error(QSerialPort::SerialPortError)),this,SLOT(handleError(QSerialPort::SerialPortError))); // подключаем првоерку ошибок порта
+    connect(thisPort, &QSerialPort::readyRead,this,&Port::ReadInProt); //подключаем чтение с порта по сигналу readyRead()
+
+    //connect(thisPort, SIGNAL(readyRead()),this,SLOT(getComData())); //подключаем чтение с порта по сигналу readyRead()
 
     listSP = new QStringList();
 
@@ -66,9 +64,9 @@ void Port::process_start()
     //Инициализация таймеров
     timer_MRK_Data = new QTimer();
 
-    QObject::connect(timer_MRK_Data,&QTimer::timeout,this,&Port::GetMrk);
-    QObject::connect(this,SIGNAL(startTimerMrk(int)),timer_MRK_Data,SLOT(start(int)));
-    QObject::connect(this,&Port::stopTimerMrk,timer_MRK_Data,&QTimer::stop);
+    connect(timer_MRK_Data,&QTimer::timeout,this,&Port::GetMrk);
+    connect(this,SIGNAL(startTimerMrk(int)),timer_MRK_Data,SLOT(start(int)));
+    connect(this,&Port::stopTimerMrk,timer_MRK_Data,&QTimer::stop);
 
 
     connect(this, &Port::start_UdpZapros,this,&Port::GetMrk);
@@ -87,8 +85,8 @@ void Port::process_Port() //Выполняется при старте клас�
 {
 
     qDebug("Open the port.cpp on the new Thread");
-    QObject::connect(thisPort,SIGNAL(error(QSerialPort::SerialPortError)),this,SLOT(handleError(QSerialPort::SerialPortError))); // подключаем првоерку ошибок порта
-    QObject::connect(thisPort, SIGNAL(readyRead()),this,SLOT(ReadInProt())); //подключаем чтение с порта по сигналу readyRead()
+    connect(thisPort,SIGNAL(error(QSerialPort::SerialPortError)),this,SLOT(handleError(QSerialPort::SerialPortError))); // подключаем првоерку ошибок порта
+    connect(thisPort, SIGNAL(readyRead()),this,SLOT(ReadInProt())); //подключаем чтение с порта по сигналу readyRead()
 
 
     listSP = new QStringList();
@@ -1010,7 +1008,11 @@ void Port::ReadInProt() // чтение данных из порта
 
 
 
-                    container->A1L1 = (amplituda*)lol.data();
+                   // container->A1L1 =  (amplituda*)lol.data();
+
+                    container->A1L1 =  reinterpret_cast<amplituda*>(lol.data());
+
+
 
 
 

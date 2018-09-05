@@ -123,7 +123,8 @@ void relizproverkaTimer::time()
 
 
 
-        if((port->PortNew->CountFindALL >= 4 && rez1->countProverka != 6) || (minut == 3 && sec == 30 && rez1->countProverka == 6)) //изменил
+//        if((port->PortNew->CountFindALL >= 4 && rez1->countProverka != 6) || (minut == 3 && sec == 30 && rez1->countProverka == 6))
+        if(port->PortNew->CountFindALL >= 4)
         {
             port->PortNew->flag_start_MRK = false;
             port->PortNew->flag_end_MRK = true;
@@ -132,8 +133,9 @@ void relizproverkaTimer::time()
             port->PortNew->flag = false;
 
             emit stopTimer1();
+            timer->stop();
 
-            // qDebug ("STOP");
+
             minut=0;
             sec = 0;
 
@@ -141,36 +143,25 @@ void relizproverkaTimer::time()
             if(rez1->countProverka == 4)
             {
 
-                // qDebug () <<"Power =" << power;
-                // qDebug () <<"Power.toDouble() =" << power.toDouble();
-
                 if(power.toDouble() < 16)
                 {
                     rez1->Good = true;
-                    //emit signal_GoodQML(true);
                 }
                 else
                 {
                     rez1->Good = false;
-                    //emit signal_GoodQML(false);
                 }
 
                 rez1->sem->release();
 
-                // qDebug () << rez1->sem->available();
             }
             else
             {
 
                 rez1->Good = true;
-
-               // emit signal_GoodQML(true);
-
                 rez1->sem->release();
 
-                // qDebug () << rez1->sem->available();
             }
-
 
         }
         else
@@ -184,43 +175,19 @@ void relizproverkaTimer::time()
 
                 port->PortNew->flag = false;
 
-
-
-
                 emit stopTimer1();
-
-
-                // qDebug ("STOP END TIME");
+                timer->stop();
 
                 minut=0;
                 sec = 0;
-
-
-
-
-                minut=0;
-                sec = 0;
-
-
-
-
-
-              //  emit signal_GoodQML(false);
-
 
                 rez1->sem->release();
-
-                // qDebug () << rez1->sem->available();
-
-
             }
         }
 
     }
     else
     {
-        // qDebug ("Ждем запуска приемника");
-
         emit signal_Tick("Ждем запуска приемника");
     }
 }
@@ -242,20 +209,20 @@ void relizproverkaTimer::time_liters()
 
         if(sec < 15 && sec > 10 && minut == 0 && flag_seitings == true)
         {
-           emit signal_GetMrk_liters(rez1->liter);
-           flag_seitings = false;
-           minut=0;
-           sec = 0;
+            emit signal_GetMrk_liters(rez1->liter);
+            flag_seitings = false;
+            minut=0;
+            sec = 0;
         }
 
-//        if(sec < 20 && sec > 15 && minut == 0 && flag_seitings == true)
-//        {
+        //        if(sec < 20 && sec > 15 && minut == 0 && flag_seitings == true)
+        //        {
 
-//            emit signal_GetMrk_liters_2(rez1->liter);
-//            flag_seitings = false;
-//            minut=0;
-//            sec = 0;
-//        }
+        //            emit signal_GetMrk_liters_2(rez1->liter);
+        //            flag_seitings = false;
+        //            minut=0;
+        //            sec = 0;
+        //        }
 
 
         sec++;
@@ -302,8 +269,6 @@ void relizproverkaTimer::time_liters()
 
         strTimer.clear();
 
-
-
         if(port->PortNew->CountFindALL >= 24) //24
         {
             port->PortNew->flag_start_MRK = false;
@@ -314,23 +279,14 @@ void relizproverkaTimer::time_liters()
 
             emit stopTimer_liters();
 
-            // qDebug ("STOP");
             minut=0;
             sec = 0;
 
-
             rez1->Good = true;
-
-           // emit signal_GoodQML(true);
 
             rez1->sem->release();
 
-            // qDebug () << rez1->sem->available();
-
             flag_seitings = true;
-
-
-
         }
         else
         {
@@ -343,35 +299,19 @@ void relizproverkaTimer::time_liters()
 
                 port->PortNew->flag = false;
 
-
                 flag_seitings = true;
-
 
                 emit stopTimer_liters();
 
-
-                qDebug () <<  "STOP END TIME NP = " << index;
-
                 minut=0;
                 sec = 0;
-
-
-               // emit signal_GoodQML(false);
-
-
                 rez1->sem->release();
-
-                // qDebug () << rez1->sem->available();
-
-
             }
         }
 
     }
     else
     {
-     //   qDebug ("Ждем запуска приемника");
-
         emit signal_Tick("Ждем запуска приемника");
     }
 }
@@ -427,9 +367,7 @@ void relizproverkaTimer::time_seitings()
         strTimer.clear();
 
 
-      //  double Amlityda = gsg->os->os->getAmplitude().toDouble();
-
-        if(minut == 3 && sec == 30 )
+        if(port->PortNew->CountFindALL >= 4)
         {
             port->PortNew->flag_start_MRK = false;
             port->PortNew->flag_end_MRK = true;
@@ -437,22 +375,17 @@ void relizproverkaTimer::time_seitings()
 
             port->PortNew->flag = false;
 
-
-
             emit stopTimer_seitings();
+            timer_seitings->stop();
 
-            // qDebug ("STOP");
             minut=0;
             sec = 0;
-
-
             rez1->sem->release();
-
 
         }
         else
         {
-            if(minut == 10 && sec == 00)
+            if(minut == 3 && sec == 30)
             {
                 rez1->Good = false;
                 port->PortNew->flag_start_MRK = false;
@@ -461,43 +394,57 @@ void relizproverkaTimer::time_seitings()
 
                 port->PortNew->flag = false;
 
-
-
-
                 emit stopTimer_seitings();
 
-
-                // qDebug ("STOP END TIME");
-
-                minut=0;
-                sec = 0;
-
-
-
+                timer_seitings->stop();
 
                 minut=0;
                 sec = 0;
-
-
-
-
-
-              //  emit signal_GoodQML(false);
-
-
                 rez1->sem->release();
-
-                // qDebug () << rez1->sem->available();
-
-
             }
         }
+
+
+
+        //        if(minut == 3 && sec == 30 )
+        //        {
+        //            port->PortNew->flag_start_MRK = false;
+        //            port->PortNew->flag_end_MRK = true;
+        //            port->PortNew->CountFindALL=0;
+
+        //            port->PortNew->flag = false;
+
+        //            emit stopTimer_seitings();
+        //            timer_seitings->stop();
+
+        //            minut=0;
+        //            sec = 0;
+        //            rez1->sem->release();
+        //        }
+        //        else
+        //        {
+        //            if(minut == 10 && sec == 00)
+        //            {
+        //                rez1->Good = false;
+        //                port->PortNew->flag_start_MRK = false;
+        //                port->PortNew->flag_end_MRK = true;
+        //                port->PortNew->CountFindALL=0;
+
+        //                port->PortNew->flag = false;
+
+        //                emit stopTimer_seitings();
+
+        //                timer_seitings->stop();
+
+        //                minut=0;
+        //                sec = 0;
+        //                rez1->sem->release();
+        //            }
+        //        }
 
     }
     else
     {
-        // qDebug ("Ждем запуска приемника");
-
         emit signal_Tick("Ждем запуска приемника");
     }
 
@@ -508,7 +455,7 @@ void relizproverkaTimer::Work()
 {
     // qDebug () << "relizproverkaTimer";
 
-   qDebug () << "НП = " <<  this->index;
+    qDebug () << "НП = " <<  this->index;
 
     if(timer->isActive())
     {
@@ -541,12 +488,9 @@ void relizproverkaTimer::slot_Power(QString powerGet)
 
 void relizproverkaTimer::slot_EndBlock()
 {
-     qDebug () << "slot_EndBlock rez1->sem->release() = " << rez1->sem->available();
+    qDebug () << "slot_EndBlock rez1->sem->release() = " << rez1->sem->available();
 
- //   if(rez1->Good)
-  //  {
-        rez1->sem->release();
-   // }
+    rez1->sem->release();
 
     qDebug () << "slot_EndBlock rez1->sem->release() = " << rez1->sem->available();
 
@@ -555,9 +499,9 @@ void relizproverkaTimer::slot_EndBlock()
 void relizproverkaTimer::slot_EndBlock_5_proverka()
 {
 
-   qDebug () << "slot_EndBlock_5_proverka rez1->sem->release() = " << rez1->sem->available() << " and " << rez1->Name;
+    qDebug () << "slot_EndBlock_5_proverka rez1->sem->release() = " << rez1->sem->available() << " and " << rez1->Name;
 
-   rez1->sem->release();
+    rez1->sem->release();
 
     qDebug () << "slot_EndBlock_5_proverka rez1->sem->release() = " << rez1->sem->available();
 
@@ -574,19 +518,19 @@ void relizproverkaTimer::slot_EndBlock_proverka()
 
 void relizproverkaTimer::slot_stopProverka_error_10Mhz()
 {
-   emit stopTimer1();
-   emit stopTimer_liters();
+    emit stopTimer1();
+    emit stopTimer_liters();
 
-   flag_seitings = false;
+    flag_seitings = false;
 
-   rez1->Good = false;
-   port->PortNew->flag_start_MRK = false;
-   port->PortNew->flag_end_MRK = true;
-   port->PortNew->CountFindALL=0;
-   port->PortNew->flag = false;
+    rez1->Good = false;
+    port->PortNew->flag_start_MRK = false;
+    port->PortNew->flag_end_MRK = true;
+    port->PortNew->CountFindALL=0;
+    port->PortNew->flag = false;
 
 
-   rez1->sem->release();
+    rez1->sem->release();
 }
 
 

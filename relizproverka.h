@@ -97,6 +97,9 @@ public:
     bool flag_good_10;
 
 
+    bool flag_300MGH_6Proverka;
+
+
     //Функция установки литеры IdLink
     void SetIdLink(QString);
 

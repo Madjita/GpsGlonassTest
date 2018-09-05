@@ -8,9 +8,20 @@ GSG::GSG(QObject *parent) : QObject(parent),
 {
 
     this->moveToThread(new QThread()); //Переместили класс GSG в новый поток
-    QObject::connect(this->thread(),&QThread::started,this,&GSG::process_start);
+    connect(this->thread(),&QThread::started,this,&GSG::process_start);
     this->thread()->start();
 
+}
+
+GSG::~GSG()
+{
+    viClose(vi);
+
+    timer_Imitator_Data->stop();
+    delete timer_Imitator_Data;
+
+    this->thread()->wait();
+    this->thread()->quit();
 }
 
 
@@ -23,15 +34,12 @@ void GSG::process_start()
     NewDataSpytnik.clear();
 
     //Инициализация таймеров
-    QTime midnight(0,0,0);
-    qsrand(midnight.secsTo(QTime::currentTime()));
-
     timer_Imitator_Data = new QTimer();
 
-    QObject::connect(timer_Imitator_Data,&QTimer::timeout,this,&GSG::Work);
+    connect(timer_Imitator_Data,&QTimer::timeout,this,&GSG::Work);
 
-    QObject::connect(this,SIGNAL(startTimer(int)),timer_Imitator_Data,SLOT(start(int)));
-    QObject::connect(this,&GSG::TimerStop,timer_Imitator_Data,&QTimer::stop);
+    connect(this,SIGNAL(startTimer(int)),timer_Imitator_Data,SLOT(start(int)));
+    connect(this,&GSG::TimerStop,timer_Imitator_Data,&QTimer::stop);
 }
 
 
@@ -121,11 +129,7 @@ bool GSG::connectDevice(QString ip)
 
     QString str  = "TCPIP0::"+ip+"::inst0::INSTR";
 
-//    viAddres = (ViRsrc)qPrintable(str);
-
-    // DisConnect();
-
-    viStatus=viOpen(defaultRM, (ViRsrc)qPrintable("TCPIP0::"+ip+"::inst0::INSTR"), VI_NULL, VI_NULL,&vi); // проверено - работает через IP
+    viStatus=viOpen(defaultRM, const_cast<ViRsrc>(qPrintable("TCPIP0::"+ip+"::inst0::INSTR")), VI_NULL, VI_NULL,&vi); // проверено - работает через IP
 
     if(viStatus<VI_SUCCESS)
     {
@@ -201,7 +205,7 @@ void GSG::getName()
 {
     char nameChar[100] = "";
 
-    viQueryf(vi,"*IDN?\t\n","%T",nameChar);
+    viQueryf(vi,const_cast<ViString>("*IDN?\t\n"),const_cast<ViString>("%T"),nameChar);
 
     name = qPrintable(nameChar);
 
@@ -219,13 +223,12 @@ void GSG::getName()
  * */
 void GSG::setCONTrol(QString command)
 {
-    viPrintf(vi, "SOURce:SCENario:CONTrol %s\r\n",qPrintable(command));
+    viPrintf(vi, const_cast<ViString>("SOURce:SCENario:CONTrol %s\r\n"),qPrintable(command));
 
     // Check errors
     char buff[100] = " ";
-    viQueryf(vi,"SYSTem:ERRor?\n","%T",buff);
+    viQueryf(vi,const_cast<ViString>("SYSTem:ERRor?\n"),const_cast<ViString>("%T"),buff);
 
-    //qDebug () << buff;
 
     if(QString(buff) != "0,\"No error\"\n")
     {
@@ -236,11 +239,11 @@ void GSG::setCONTrol(QString command)
 
 void GSG::setGenCONTrol(QString command)
 {
-    viPrintf(vi, "SOURce:ONECHN:CONTrol %s\r\n",qPrintable(command));
+    viPrintf(vi, const_cast<ViString>("SOURce:ONECHN:CONTrol %s\r\n"),qPrintable(command));
 
     // Check errors
     char buff[100] = " ";
-    viQueryf(vi,"SYSTem:ERRor?\n","%T",buff);
+    viQueryf(vi,const_cast<ViString>("SYSTem:ERRor?\n"),const_cast<ViString>("%T"),buff);
 
    // qDebug () << buff;
 
@@ -257,15 +260,15 @@ void GSG::setGenCONTrol(QString command)
 void GSG::setGenSATid(QString Np_liter)
 {
 
-    viPrintf(vi, "SOURce:ONECHN:CONTrol STOP\r\n");
+    viPrintf(vi, const_cast<ViString>("SOURce:ONECHN:CONTrol STOP\r\n"));
 
     qDebug () << " Np_liter = " <<  Np_liter;
 
-    viPrintf(vi, "SOURce:ONECHN:SATid %s\r\n",qPrintable(Np_liter));
+    viPrintf(vi, const_cast<ViString>("SOURce:ONECHN:SATid %s\r\n"),qPrintable(Np_liter));
 
     // Check errors
     char buff[100] = " ";
-    viQueryf(vi,"SYSTem:ERRor?\n","%T",buff);
+    viQueryf(vi,const_cast<ViString>("SYSTem:ERRor?\n"),const_cast<ViString>("%T"),buff);
 
     qDebug () << buff;
 
@@ -289,11 +292,11 @@ void GSG::setGenSATid(QString Np_liter)
 
 void GSG::setGenSIGNALtype(QString type_signal)
 {
-    viPrintf(vi, "SOURce:ONECHN:SIGNALtype %s\r\n",qPrintable(type_signal));  //GLOL1 and  GPSL1P
+    viPrintf(vi, const_cast<ViString>("SOURce:ONECHN:SIGNALtype %s\r\n"),qPrintable(type_signal));  //GLOL1 and  GPSL1P
 
     // Check errors
     char buff[100] = " ";
-    viQueryf(vi,"SYSTem:ERRor?\n","%T",buff);
+    viQueryf(vi,const_cast<ViString>("SYSTem:ERRor?\n"),const_cast<ViString>("%T"),buff);
 
    // qDebug () << buff;
 
@@ -329,12 +332,12 @@ QString GSG::getCONTrol()
     char buff [100] = "";
     // char* bufQuery = new char();
 
-    viQueryf(vi, "SOURce:SCENario:CONTrol?\n","%T",bufQuery);
+    viQueryf(vi, const_cast<ViString>("SOURce:SCENario:CONTrol?\n"),const_cast<ViString>("%T"),bufQuery);
 
     // Check errors
     //  char* buff = new char();
 
-    viQueryf(vi,"SYSTem:ERRor?\n","%T",buff);
+    viQueryf(vi,const_cast<ViString>("SYSTem:ERRor?\n"),const_cast<ViString>("%T"),buff);
 
 
     if(QString(buff) == "0,\"No error\"\n")
@@ -365,11 +368,11 @@ QString GSG::getCONTrol()
 void GSG::setSIGNALtype(QString SIGNALtype)
 {
 
-    viPrintf(vi, "SOURce:ONECHN:SIGNALtype %T\r\n",&SIGNALtype);
+    viPrintf(vi, const_cast<ViString>("SOURce:ONECHN:SIGNALtype %T\r\n"),&SIGNALtype);
 
     // Check errors
     char buff[100] = "";
-    viQueryf(vi,"SYSTem:ERRor?\n","%T",buff);
+    viQueryf(vi,const_cast<ViString>("SYSTem:ERRor?\n"),const_cast<ViString>("%T"),buff);
 
     if(QString(buff) != "0,\"No error\"\n")
     {
@@ -385,12 +388,12 @@ QString GSG::getSIGNALtype()
 {
     char bufQuery[100] = "";
 
-    viQueryf(vi, "SOURce:ONECHN:SIGNALtype?\n","%T",bufQuery);
+    viQueryf(vi, const_cast<ViString>("SOURce:ONECHN:SIGNALtype?\n"),const_cast<ViString>("%T"),bufQuery);
 
     // Check errors
     char buff[100] = "";
 
-    viQueryf(vi,"SYSTem:ERRor?\n","%T",buff);
+    viQueryf(vi,const_cast<ViString>("SYSTem:ERRor?\n"),const_cast<ViString>("%T"),buff);
 
 
     if(QString(buff) == "0,\"No error\"\n")
@@ -418,12 +421,12 @@ QString GSG::getSIGNALtype(QString id)
     char bufSignal[100] = "";
 
 
-    viQueryf(vi, "SOUR:SCEN:SIGNAL? %s\r\n","%T",qPrintable(id),bufSignal);
+    viQueryf(vi, const_cast<ViString>("SOUR:SCEN:SIGNAL? %s\r\n"),const_cast<ViString>("%T"),qPrintable(id),bufSignal);
 
     // Check errors
     char buff[100] = "";
 
-    viQueryf(vi,"SYSTem:ERRor?\n","%T",buff);
+    viQueryf(vi,const_cast<ViString>("SYSTem:ERRor?\n"),const_cast<ViString>("%T"),buff);
 
 
     if(QString(buff) == "0,\"No error\"\n")
@@ -469,12 +472,12 @@ QString GSG::getSATid(int n)
 {
     char bufID[100] = "";
 
-    viQueryf(vi, "SOURce:SCENario:SATid%d?\n","%T",n,bufID);
+    viQueryf(vi, const_cast<ViString>("SOURce:SCENario:SATid%d?\n"),const_cast<ViString>("%T"),n,bufID);
 
     // Check errors
     char buff[100] = "";
 
-    viQueryf(vi,"SYSTem:ERRor?\n","%T",buff);
+    viQueryf(vi,const_cast<ViString>("SYSTem:ERRor?\n"),const_cast<ViString>("%T"),buff);
 
 
     if(QString(buff) == "0,\"No error\"\n")
@@ -500,12 +503,12 @@ QString GSG::getFREQuency(int n)
 {
     char bufID[100] = "";
 
-    viQueryf(vi, "SOURce:SCENario:FREQuency%d?\n","%T",n,bufID);
+    viQueryf(vi, const_cast<ViString>("SOURce:SCENario:FREQuency%d?\n"),const_cast<ViString>("%T"),n,bufID);
 
     // Check errors
     char buff[100] = "";
 
-    viQueryf(vi,"SYSTem:ERRor?\n","%T",buff);
+    viQueryf(vi,const_cast<ViString>("SYSTem:ERRor?\n"),const_cast<ViString>("%T"),buff);
 
 
     if(QString(buff) == "0,\"No error\"\n")
@@ -530,12 +533,12 @@ QString GSG::getFREQuency(QString id)
 {
     char bufID[100] = "";
 
-    viQueryf(vi, "SOURce:SCENario:FREQuency? %s\n","%T",qPrintable(id),bufID);
+    viQueryf(vi, const_cast<ViString>("SOURce:SCENario:FREQuency? %s\n"),const_cast<ViString>("%T"),qPrintable(id),bufID);
 
     // Check errors
     char buff[100] = "";
 
-    viQueryf(vi,"SYSTem:ERRor?\n","%T",buff);
+    viQueryf(vi,const_cast<ViString>("SYSTem:ERRor?\n"),const_cast<ViString>("%T"),buff);
 
 
     if(QString(buff) == "0,\"No error\"\n")
@@ -562,12 +565,12 @@ QString GSG::getFREQuency(QString id)
 void GSG::setPOWer(int id,int power,QString freqband)
 {
 
-    viPrintf(vi, "SOURce:SCENario:POWer%d %d,%s\r\n",id,power,qPrintable(freqband));
+    viPrintf(vi, const_cast<ViString>("SOURce:SCENario:POWer%d %d,%s\r\n"),id,power,qPrintable(freqband));
 
     // Check errors
     char buff[100] = "";
 
-    viQueryf(vi,"SYSTem:ERRor?\n","%T",buff);
+    viQueryf(vi,const_cast<ViString>("SYSTem:ERRor?\n"),const_cast<ViString>("%T"),buff);
 
     if(QString(buff) != "0,\"No error\"\n")
     {
@@ -584,11 +587,11 @@ void GSG::setPOWer(int id,int power,QString freqband)
 void GSG::setPOWer(QString id,int power,QString freqband)
 {
 
-    viPrintf(vi, "SOURce:SCENario:POWer %s,%d,%s\r\n",qPrintable(id),power,qPrintable(freqband));
+    viPrintf(vi, const_cast<ViString>("SOURce:SCENario:POWer %s,%d,%s\r\n"),qPrintable(id),power,qPrintable(freqband));
 
     // Check errors
     char buff[100] = "";
-    viQueryf(vi,"SYSTem:ERRor?\n","%T",buff);
+    viQueryf(vi,const_cast<ViString>("SYSTem:ERRor?\n"),const_cast<ViString>("%T"),buff);
 
     if(QString(buff) != "0,\"No error\"\n")
     {
@@ -606,14 +609,14 @@ void GSG::setPOWer(QString id,int power,QString freqband)
 void GSG::setPOWerALL(int power,QString freqband)
 {
 
-    viPrintf(vi, "SOURce:SCENario:FREQBAND:POWer %d,%s\r\n",power,qPrintable(freqband));
+    viPrintf(vi, const_cast<ViString>("SOURce:SCENario:FREQBAND:POWer %d,%s\r\n"),power,qPrintable(freqband));
 
     // Check errors
     //  char* buff = new char();
 
     char buff[100] = "";
 
-    viQueryf(vi,"SYSTem:ERRor?\n","%T",buff);
+    viQueryf(vi,const_cast<ViString>("SYSTem:ERRor?\n"),const_cast<ViString>("%T"),buff);
 
     if(QString(buff) != "0,\"No error\"\n")
     {
@@ -633,12 +636,12 @@ QString GSG::getPOWer(int id,QString freqband)
 
     char bufID[100] = "";
 
-    viQueryf(vi, "SOURce:SCENario:POWer%d? %s\n","%T",id,qPrintable(freqband),bufID);
+    viQueryf(vi, const_cast<ViString>("SOURce:SCENario:POWer%d? %s\n"),const_cast<ViString>("%T"),id,qPrintable(freqband),bufID);
 
     // Check errors
     char buff[100] = "";
 
-    viQueryf(vi,"SYSTem:ERRor?\n","%T",buff);
+    viQueryf(vi,const_cast<ViString>("SYSTem:ERRor?\n"),const_cast<ViString>("%T"),buff);
 
 
     if(QString(buff) == "0,\"No error\"\n")
@@ -667,12 +670,12 @@ QString GSG::getPOWer(QString id)
 
     char bufID[100] = "";
 
-    viQueryf(vi, "SOURce:SCENario:POWer? %s\n","%T",qPrintable(id),bufID);
+    viQueryf(vi, const_cast<ViString>("SOURce:SCENario:POWer? %s\n"),const_cast<ViString>("%T"),qPrintable(id),bufID);
 
     // Check errors
     char buff[100]="";
 
-    viQueryf(vi,"SYSTem:ERRor?\n","%T",buff);
+    viQueryf(vi,const_cast<ViString>("SYSTem:ERRor?\n"),const_cast<ViString>("%T"),buff);
 
 
     if(QString(buff) == "0,\"No error\"\n")
@@ -699,12 +702,12 @@ QString GSG::getSVmodel(int id)
 {
     char bufID[100] = "";
 
-    viQueryf(vi, "SOURce:SCENario:SVmodel%d? %s\n","%T",id,bufID);
+    viQueryf(vi, const_cast<ViString>("SOURce:SCENario:SVmodel%d? %s\n"),const_cast<ViString>("%T"),id,bufID);
 
     // Check errors
     char buff[100] = "";
 
-    viQueryf(vi,"SYSTem:ERRor?\n","%T",buff);
+    viQueryf(vi,const_cast<ViString>("SYSTem:ERRor?\n"),const_cast<ViString>("%T"),buff);
 
 
     if(QString(buff) == "0,\"No error\"\n")
@@ -731,12 +734,12 @@ QString GSG::getSVmodel(QString id)
 {
     char bufID[100] = "";
 
-    viQueryf(vi, "SOURce:SCENario:SVmodel? %s %s\n","%T",qPrintable(id),bufID);
+    viQueryf(vi, const_cast<ViString>("SOURce:SCENario:SVmodel? %s %s\n"),const_cast<ViString>("%T"),qPrintable(id),bufID);
 
     // Check errors
     char buff[100] = "";
 
-    viQueryf(vi,"SYSTem:ERRor?\n","%T",buff);
+    viQueryf(vi,const_cast<ViString>("SYSTem:ERRor?\n"),const_cast<ViString>("%T"),buff);
 
 
     if(QString(buff) == "0,\"No error\"\n")
@@ -758,13 +761,13 @@ QString GSG::getPosition()
 
     // viPrintf(vi, "*WAI\r\n");
 
-    viQueryf(vi, "SOURce:SCENario:LOG?\n","%T",bufID);
+    viQueryf(vi, const_cast<ViString>("SOURce:SCENario:LOG?\n"),const_cast<ViString>("%T"),bufID);
 
 
     // Check errors
     char buff[100];
 
-    viQueryf(vi,"SYSTem:ERRor?\n","%T",buff);
+    viQueryf(vi,const_cast<ViString>("SYSTem:ERRor?\n"),const_cast<ViString>("%T"),buff);
 
 
     if(QString(buff) == "0,\"No error\"\n")
@@ -789,11 +792,11 @@ void GSG::getScenDataTime()
     char bufDataTime[100] = "";
     char bufDataTimeError[100] = "";
 
-    viQueryf(vi, "SOURce:SCENario:DATEtime? UTC\n","%T",&bufDataTime);
+    viQueryf(vi, const_cast<ViString>("SOURce:SCENario:DATEtime? UTC\n"),const_cast<ViString>("%T"),&bufDataTime);
 
 
     // Check errors
-    viQueryf(vi,"SYSTem:ERRor?\n","%T",&bufDataTimeError);
+    viQueryf(vi,const_cast<ViString>("SYSTem:ERRor?\n"),const_cast<ViString>("%T"),&bufDataTimeError);
 
     // qDebug () << QString(qPrintable(bufDataTime)).split("\n").first();
 
@@ -819,13 +822,13 @@ QString GSG::getNumberIDSpytnik()
     char bufID[100]= "";
 
 
-    viQueryf(vi, "SOURce:SCENario:SVINview?\n","%T",bufID);
+    viQueryf(vi, const_cast<ViString>("SOURce:SCENario:SVINview?\n"),const_cast<ViString>("%T"),bufID);
 
 
     // Check errors
     char buff[100]= "";
 
-    viQueryf(vi,"SYSTem:ERRor?\n","%T",buff);
+    viQueryf(vi,const_cast<ViString>("SYSTem:ERRor?\n"),const_cast<ViString>("%T"),buff);
 
 
 

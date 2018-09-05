@@ -116,7 +116,7 @@ void FindDevice::setListDevice(QByteArray data, QString peerName)
     // DisConnect();
 
     //Подключеие к уйстройству
-    viStatus=viOpen(defaultRM, (ViRsrc)qPrintable("TCPIP0::"+peerName+"::inst0::INSTR"), VI_NULL, VI_NULL,&vi); // проверено - работает через IP
+    viStatus=viOpen(defaultRM, const_cast<ViRsrc>(qPrintable("TCPIP0::"+peerName+"::inst0::INSTR")), VI_NULL, VI_NULL,&vi); // проверено - работает через IP
 
 
     if(viStatus<VI_SUCCESS)
@@ -125,7 +125,7 @@ void FindDevice::setListDevice(QByteArray data, QString peerName)
 
         // viAddres = (ViRsrc)qPrintable(str2);
 
-        viStatus=viOpen(defaultRM, (ViRsrc)qPrintable("TCPIP0::"+peerName+"::8888::SOCKET::GEN"), VI_NULL, VI_NULL,&vi); // проверено - работает через IP
+        viStatus=viOpen(defaultRM, const_cast<ViRsrc>(qPrintable("TCPIP0::"+peerName+"::8888::SOCKET::GEN")), VI_NULL, VI_NULL,&vi); // проверено - работает через IP
 
         if(viStatus<VI_SUCCESS)
         {
@@ -136,7 +136,7 @@ void FindDevice::setListDevice(QByteArray data, QString peerName)
 
             qDebug() << "[Соединение c "<< peerName<<" установленно(ОК)]";
 
-            viQueryf(vi,"*IDN?\t\n","%T",nameChar);
+            viQueryf(vi,const_cast<ViString>("*IDN?\t\n"),const_cast<ViString>("%T"),nameChar);
 
             qDebug() << qPrintable(nameChar);
 

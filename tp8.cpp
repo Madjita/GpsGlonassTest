@@ -265,12 +265,7 @@ void TP8::readPendingDatagrams()
                 if(datagram[2] ==  static_cast<char>(0x03))
                 {
                     qDebug () << "Команда 0x05 выполнена";
-
-                    if(flagClear == false)
-                    {
-                        emit signal_comanda5_ok(index);
-                    }
-
+                    emit signal_comanda5_ok(index);
                 }
             }
 
@@ -565,7 +560,7 @@ void TP8::slot_comand4_Connect_Vx1_MShY(char NP)
 void TP8::slot_comand5_Connect_10MG(char NP,bool _flagClear)
 {
 
-    flagClear = _flagClear;
+    // flagClear = false;
 
     QByteArray b;
 

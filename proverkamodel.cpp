@@ -40,13 +40,13 @@ ProverkaModel::ProverkaModel(CamberModel *camberGet, gsgModel *gsgGet, N6700Mode
     //    proverka7 = new proverkaItem(3,n6700,gsg,port,true, false,"ЛЖ0007");
     //    proverka8 = new proverkaItem(4,n6700,gsg,port,true, false,"ЛЖ0008");
 
-    proverka2 = NULL;
-    proverka3 = NULL;
-    proverka4 = NULL;
-    proverka5 = NULL;
-    proverka6 = NULL;
-    proverka7 = NULL;
-    proverka8 = NULL;
+    proverka2 = nullptr;
+    proverka3 = nullptr;
+    proverka4 = nullptr;
+    proverka5 = nullptr;
+    proverka6 = nullptr;
+    proverka7 = nullptr;
+    proverka8 = nullptr;
 
     //1
     // m_ListProverkaItem->append(new proverkaItem(1,n6700,gsg,port,false, false,"ЛЖ0001")); // Дописать код для спрашивания имени у приемника

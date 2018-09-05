@@ -153,7 +153,6 @@ void RelizProverka::proverka_rabotosposobnosti_NP_ID_1()
     qDebug () << "Запустили proverka_rabotosposobnosti_NP_ID_1 проверку " << index;
 
 
-
 //    gsg->tp->index = index;
 //    gsg->tp->slot_comand2_Connect_Vx1_1C(*QString::number(index).toUtf8().data()-0x30);
 
@@ -914,6 +913,7 @@ void RelizProverka::proverka_rabotosposobnosti_Ponijennoe_naprRjenie_NP_ID_6()
 
     //Флаг работы, приемник включен
     job = true;
+    flag_300MGH_6Proverka = false;
 
     if(index == 1)
     {
@@ -929,7 +929,7 @@ void RelizProverka::proverka_rabotosposobnosti_Ponijennoe_naprRjenie_NP_ID_6()
     gsg->os->slot_Change_Seitings();
 
     gsg->tp->index = index;
-    gsg->tp->slot_comand7_Set_zatyxanie_10(0x9B);
+    gsg->tp->slot_comand7_Set_zatyxanie_10(static_cast<char>(0x9B));
     sem->acquire();
 
     gsg->tp->index = index;
@@ -938,28 +938,19 @@ void RelizProverka::proverka_rabotosposobnosti_Ponijennoe_naprRjenie_NP_ID_6()
 
     gsg->tp->index = index;
     gsg->tp->slot_comand5_Connect_10MG(0x01,true); //(*QString::number(index).toUtf8().data()-0x30);
-
-
-//    gsg->tp->index = index;
-//    gsg->tp->slot_comand1_Connect_Vx2_10(*QString::number(index).toUtf8().data()-0x30);
-
-//    sem->acquire();
-
-
-
-
+    sem->acquire();
 
 
     for(int i=0x9B; i > 0; i--)
     {
 
-        qDebug() << (UINT)i;
+        //qDebug() << (UINT)i;
 
         gsg->tp->index = index;
-        gsg->tp->slot_comand7_Set_zatyxanie_10(i);
+        gsg->tp->slot_comand7_Set_zatyxanie_10(static_cast<char>(i));
         sem->acquire();
 
-        // this->thread()->sleep(1);
+        //this->thread()->msleep(10);
 
         QString VMAX = gsg->os->os->getVRMS("CHANnel2");
 
@@ -968,11 +959,11 @@ void RelizProverka::proverka_rabotosposobnosti_Ponijennoe_naprRjenie_NP_ID_6()
 
         qDebug () <<"VMAX.toDouble() = " << VMAX.toDouble();
 
-        if(VMAX.toDouble() >= 0.2 &&  VMAX.toDouble() <= 0.3 ) //мили вольты
+        if(VMAX.toDouble() >= 0.2 &&  VMAX.toDouble() <= 0.23 ) //мили вольты
         {
             flag_good_6 = true;
 
-            qDebug () <<"[VMAX.toDouble() >= 0.2 &&  VMAX.toDouble() <= 0.3  ] = " << flag_good_6;
+            qDebug () <<"[VMAX.toDouble() >= 0.2 &&  VMAX.toDouble() <= 0.23  ] = " << flag_good_6;
 
             break;
 
@@ -981,7 +972,7 @@ void RelizProverka::proverka_rabotosposobnosti_Ponijennoe_naprRjenie_NP_ID_6()
         {
             flag_good_6 = false;
 
-            if(( VMAX.toDouble() > 0.3 ) || (VMAX.toDouble() == 0) )
+            if(( VMAX.toDouble() > 0.3 ) || (VMAX.toDouble() == 0.0) )
             {
                 break;
             }
@@ -995,7 +986,7 @@ void RelizProverka::proverka_rabotosposobnosti_Ponijennoe_naprRjenie_NP_ID_6()
     sem->acquire();
 
     gsg->tp->index = index;
-    gsg->tp->slot_comand3_Connect_Vx2_1C(); //(*QString::number(index).toUtf8().data()-0x30);
+    gsg->tp->slot_comand3_Connect_Vx2_1C();
     sem->acquire();
 
     gsg->tp->index = index;
@@ -1018,7 +1009,7 @@ void RelizProverka::proverka_rabotosposobnosti_Ponijennoe_naprRjenie_NP_ID_6()
 
     emit signal_StartProverkaIndex(QString::number(countProverka));
 
-    this->thread()->msleep(10);
+    this->thread()->msleep(50);
 
 
 
@@ -1033,10 +1024,162 @@ void RelizProverka::proverka_rabotosposobnosti_Ponijennoe_naprRjenie_NP_ID_6()
 
     //Сигнал начала запуска таймера для проверки (3.30 минут)
     emit startWork();
+    this->thread()->msleep(50);
+
     qDebug () << "Запустили 6 проверку";
     qDebug () << "Проверка Начата 6 = " << sem->available();
+
     //Семафор для остановки потока проверок для того чтоб подождать пока не найдутся спутники (не выполнится сама проверка)
     sem->acquire();
+
+    //По окончанию работы проверки переводим флаг работы в ложь, для показания того, что приемник прошел проверку и может быть выключен
+    job = false;
+    qDebug () << "Проверка 6  Прошла = " << sem->available();
+    //Флаг показывающий прошел ли приемник данную проверку или нет
+    flag_good_6 = Good;
+
+
+
+
+    if(flag_good_6)
+    {
+        gsg->BD->zaprosQueryModel("UPDATE Result SET DateStayEnd = '"+QDateTime::currentDateTime().toString("dd.MM.yyyy  hh:mm:ss")+"', "
+                                                                                                                                    "Sootv = 'Соответствует'  WHERE DateStayStart = '"+stay.toString("dd.MM.yyyy  hh:mm:ss")+"' AND IdLink = '"+IdLink+"'");
+    }
+    else
+    {
+        gsg->BD->zaprosQueryModel("UPDATE Result SET DateStayEnd = '"+QDateTime::currentDateTime().toString("dd.MM.yyyy  hh:mm:ss")+"', "
+                                                                                                                                    "Sootv = 'Не соответствует'  WHERE DateStayStart = '"+stay.toString("dd.MM.yyyy  hh:mm:ss")+"' AND IdLink = '"+IdLink+"'");
+    }
+
+    //Сигнал выключения питания приемника по окончанию проверки
+    emit setOutput(QString::number(index),false);
+
+    gsg->tp->index = index;
+    gsg->tp->slot_comand8_Connect_10_in(*QString::number(index).toUtf8().data()-0x30);
+    sem->acquire();
+
+    //Сигнал завершения проверки
+    emit signal_EndProverka(countProverka);
+    qDebug () << "Ждем остальные приемники = " << sem->available();
+    //Остановка потока для того чтоб дождаться остальные приемники для перехода на следующую првоерку
+
+//    emit signal_slot_StartProverka_Os(index);
+//    sem->acquire();
+
+    flag_300MGH_6Proverka = true;
+
+    ///////////////////////////////////////////////////////////////
+
+    //Флаг работы, приемник включен
+    job = true;
+    gsg->os->os->flag_change_seitings = true;
+
+    gsg->os->slot_Change_Seitings();
+
+    gsg->tp->index = index;
+    gsg->tp->slot_comand7_Set_zatyxanie_10(static_cast<char>(0x9B));
+    sem->acquire();
+
+    gsg->tp->index = index;
+    gsg->tp->slot_comand6_Connect_Vx2_10_ext();
+    sem->acquire();
+
+    gsg->tp->index = index;
+    gsg->tp->slot_comand5_Connect_10MG(0x01,true); //(*QString::number(index).toUtf8().data()-0x30);
+    sem->acquire();
+
+
+    for(int i=0x9B; i > 0; i--)
+    {
+
+        //qDebug() << (UINT)i;
+
+        gsg->tp->index = index;
+        gsg->tp->slot_comand7_Set_zatyxanie_10(static_cast<char>(i));
+        sem->acquire();
+
+        //this->thread()->msleep(10);
+
+        QString VMAX = gsg->os->os->getVRMS("CHANnel2");
+
+
+        qDebug () <<"VMAX = " << VMAX;
+
+        qDebug () <<"VMAX.toDouble() = " << VMAX.toDouble();
+
+        if(VMAX.toDouble() >= 0.3 &&  VMAX.toDouble() <= 0.33 ) //мили вольты
+        {
+            flag_good_6 = true;
+
+            qDebug () <<"[VMAX.toDouble() >= 0.3 &&  VMAX.toDouble() <= 0.33  ] = " << flag_good_6;
+
+            break;
+
+        }
+        else
+        {
+            flag_good_6 = false;
+
+            if(( VMAX.toDouble() > 0.33 ) || (VMAX.toDouble() == 0.0) )
+            {
+                break;
+            }
+
+        }
+    }
+
+
+    gsg->tp->index = index;
+    gsg->tp->slot_comand8_Connect_10_in(0x01);
+    sem->acquire();
+
+    gsg->tp->index = index;
+    gsg->tp->slot_comand3_Connect_Vx2_1C();
+    sem->acquire();
+
+    gsg->tp->index = index;
+    gsg->tp->slot_comand5_Connect_10MG(*QString::number(index).toUtf8().data()-0x30,false);
+    sem->acquire();
+
+    //Cигнал для установки напряжения на источнике питания на том блоке к которому подсоединен приемник
+    emit setVolt(QString::number(index),"5");
+
+    this->thread()->msleep(50);
+
+    //Подача питания на приемник
+    emit setOutput(QString::number(index),true);
+
+    this->thread()->msleep(50);
+
+    emit signal_startImitator();
+
+    this->thread()->msleep(50);
+
+    emit signal_StartProverkaIndex(QString::number(countProverka));
+
+    this->thread()->msleep(50);
+
+
+
+
+    stay = QDateTime::currentDateTime();
+    qDebug () << "Проверка 6 Начата  ждем";
+    qDebug () << "Дата старта: " << start.toString("dd.MM.yyyy  hh:mm:ss");
+    //Запись в БД начала проверки
+    gsg->BD->zaprosQueryModel("INSERT INTO Result (DateStayStart,IdLink,IdProverki) VALUES('"+stay.toString("dd.MM.yyyy  hh:mm:ss")+"','"+IdLink+"','"+QString::number(countProverka)+"')");
+    //Семафор для остановки потока проверок для того чтоб подождать пока не найдутся спутники (не выполнится сама проверка)
+
+
+    //Сигнал начала запуска таймера для проверки (3.30 минут)
+    emit startWork();
+
+    qDebug () << "Запустили 6 проверку";
+    qDebug () << "Проверка Начата 6 = " << sem->available();
+
+    //Семафор для остановки потока проверок для того чтоб подождать пока не найдутся спутники (не выполнится сама проверка)
+    sem->acquire();
+
     //По окончанию работы проверки переводим флаг работы в ложь, для показания того, что приемник прошел проверку и может быть выключен
     job = false;
     qDebug () << "Проверка 6  Прошла = " << sem->available();
@@ -1067,7 +1210,6 @@ void RelizProverka::proverka_rabotosposobnosti_Ponijennoe_naprRjenie_NP_ID_6()
     gsg->tp->slot_comand8_Connect_10_in(*QString::number(index).toUtf8().data()-0x30);
     sem->acquire();
 
-
     //Сигнал завершения проверки
     emit signal_EndProverka(countProverka);
     qDebug () << "Ждем остальные приемники = " << sem->available();
@@ -1075,6 +1217,8 @@ void RelizProverka::proverka_rabotosposobnosti_Ponijennoe_naprRjenie_NP_ID_6()
 
     emit signal_slot_StartProverka_Os(index);
     sem->acquire();
+
+
 
     if(flag_auto)
     {
@@ -1093,23 +1237,16 @@ void RelizProverka::proverka_rabotosposobnosti_Ponijennoe_naprRjenie_NP_ID_7()
     sem->acquire();
 
     emit signal_StartProverkaIndex(QString::number(countProverka));
-    //запускаем приемник (падали ток)
+    //запускаем приемник
     emit setOutput(QString::number(index),true);
 
     job = true;
 
     emit startWork_Os();
 
-    emit signal_start_10Proverka(index);
-    sem->acquire();
 
-    gsg->tp->index = index;
-    gsg->tp->slot_comand8_Connect_10_in(*QString::number(index).toUtf8().data()-0x30);
-
-    sem->acquire();
-
-    emit signal_slot_StartProverka_Os(index);
-    sem->acquire();
+//    emit signal_slot_StartProverka_Os(index);
+//    sem->acquire();
 
     qDebug () << "Запустили 7 проверку";
 
@@ -1135,13 +1272,7 @@ void RelizProverka::proverka_rabotosposobnosti_Ponijennoe_naprRjenie_NP_ID_7()
     qDebug () << "Номер НП = " << *QString::number(index).toUtf8().data();
 
     gsg->tp->index = index;
-    gsg->tp->slot_comand2_Connect_Vx1_1C(*QString::number(index).toUtf8().data()-0x30);
-
-    sem->acquire();
-
-    gsg->tp->index = index;
     gsg->tp->slot_comand1_Connect_Vx2_10(*QString::number(index).toUtf8().data()-0x30);
-
     sem->acquire();
 
 
@@ -1548,14 +1679,10 @@ void RelizProverka::Work(bool auto_test, int proverka)
 {
     qDebug () << "RelizProverka";
 
-
-
-
     flag_auto = auto_test;
 
     if(auto_test)
     {
-        sem->acquire();
         emit signal_StartProverka_1();
     }
     else

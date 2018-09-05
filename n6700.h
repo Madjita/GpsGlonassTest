@@ -43,13 +43,13 @@ public:
     QString getEror();
     QVector<QString> getMeasureVolt(QString canal);
 
+    char buffEror[100];
+    QVector<QString> VectorMeasureVoltALL;
+    QVector<QString> VectorMeasureCURRentALL;
 
     explicit N6700(QObject *parent = 0);
 
-    ~N6700()
-    {
-        viClose(vi);
-    }
+    ~N6700();
 
 
     bool flag_work;

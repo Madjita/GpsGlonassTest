@@ -38,10 +38,7 @@ public:
 
     explicit GSG(QObject *parent = 0);
 
-    ~GSG()
-    {
-        viClose(vi);
-    }
+    ~GSG();
 
     bool flag_work;
 

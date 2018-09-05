@@ -72,14 +72,14 @@ void Proverka::process_start()
     m_ListProverkaItem->clear();
     res.clear();
 
-    proverka1 = NULL;
-    proverka2 = NULL;
-    proverka3 = NULL;
-    proverka4 = NULL;
-    proverka5 = NULL;
-    proverka6 = NULL;
-    proverka7 = NULL;
-    proverka8 = NULL;
+    proverka1 = nullptr;
+    proverka2 = nullptr;
+    proverka3 = nullptr;
+    proverka4 = nullptr;
+    proverka5 = nullptr;
+    proverka6 = nullptr;
+    proverka7 = nullptr;
+    proverka8 = nullptr;
 
     Count_NP = list_CountNP.count();
 
@@ -165,13 +165,13 @@ void Proverka::process_start()
     case 1:
     {
         proverka1 = new proverkaItem(1,n6700,gsg,port,false, false,"ЛЖ0001",screenClass);
-        proverka2 = NULL;
-        proverka3 = NULL;
-        proverka4 = NULL;
-        proverka5 = NULL;
-        proverka6 = NULL;
-        proverka7 = NULL;
-        proverka8 = NULL;
+        proverka2 = nullptr;
+        proverka3 = nullptr;
+        proverka4 = nullptr;
+        proverka5 = nullptr;
+        proverka6 = nullptr;
+        proverka7 = nullptr;
+        proverka8 = nullptr;
 
         //1
         m_ListProverkaItem->append(proverka1); // Дописать код для спрашивания имени у приемника
@@ -184,12 +184,12 @@ void Proverka::process_start()
     {
         proverka1 = new proverkaItem(1,n6700,gsg,port,false, false,"ЛЖ0001",screenClass);
         proverka2 = new proverkaItem(2,n6700,gsg,port2,false, false,"ЛЖ0002",screenClass);
-        proverka3 = NULL;
-        proverka4 = NULL;
-        proverka5 = NULL;
-        proverka6 = NULL;
-        proverka7 = NULL;
-        proverka8 = NULL;
+        proverka3 = nullptr;
+        proverka4 = nullptr;
+        proverka5 = nullptr;
+        proverka6 = nullptr;
+        proverka7 = nullptr;
+        proverka8 = nullptr;
 
         //1
         m_ListProverkaItem->append(proverka1); // Дописать код для спрашивания имени у приемника
@@ -206,11 +206,11 @@ void Proverka::process_start()
         proverka1 = new proverkaItem(1,n6700,gsg,port,false, false,"ЛЖ0001",screenClass);
         proverka2 = new proverkaItem(2,n6700,gsg,port2,false, false,"ЛЖ0002",screenClass);
         proverka3 = new proverkaItem(3,n6700,gsg,port3,false, false,"ЛЖ0003",screenClass);
-        proverka4 = NULL;
-        proverka5 = NULL;
-        proverka6 = NULL;
-        proverka7 = NULL;
-        proverka8 = NULL;
+        proverka4 = nullptr;
+        proverka5 = nullptr;
+        proverka6 = nullptr;
+        proverka7 = nullptr;
+        proverka8 = nullptr;
 
         //1
         m_ListProverkaItem->append(proverka1); // Дописать код для спрашивания имени у приемника
@@ -232,10 +232,10 @@ void Proverka::process_start()
         proverka2 = new proverkaItem(2,n6700,gsg,port2,false, false,"ЛЖ0002",screenClass);
         proverka3 = new proverkaItem(3,n6700,gsg,port3,false, false,"ЛЖ0003",screenClass);
         proverka4 = new proverkaItem(4,n6700,gsg,port4,false, false,"ЛЖ0004",screenClass);
-        proverka5 = NULL;
-        proverka6 = NULL;
-        proverka7 = NULL;
-        proverka8 = NULL;
+        proverka5 = nullptr;
+        proverka6 = nullptr;
+        proverka7 = nullptr;
+        proverka8 = nullptr;
 
         //1
         m_ListProverkaItem->append(proverka1); // Дописать код для спрашивания имени у приемника
@@ -262,9 +262,9 @@ void Proverka::process_start()
         proverka3 = new proverkaItem(3,n6700,gsg,port3,false, false,"ЛЖ0003",screenClass);
         proverka4 = new proverkaItem(4,n6700,gsg,port4,false, false,"ЛЖ0004",screenClass);
         proverka5 = new proverkaItem(5,n6700_2,gsg,port5,false, false,"ЛЖ0005",screenClass);
-        proverka6 = NULL;
-        proverka7 = NULL;
-        proverka8 = NULL;
+        proverka6 = nullptr;
+        proverka7 = nullptr;
+        proverka8 = nullptr;
 
         //1
         m_ListProverkaItem->append(proverka1); // Дописать код для спрашивания имени у приемника
@@ -296,8 +296,8 @@ void Proverka::process_start()
         proverka4 = new proverkaItem(4,n6700,gsg,port4,false, false,"ЛЖ0004",screenClass);
         proverka5 = new proverkaItem(5,n6700_2,gsg,port5,false, false,"ЛЖ0005",screenClass);
         proverka6 = new proverkaItem(6,n6700_2,gsg,port6,false, false,"ЛЖ0006",screenClass);
-        proverka7 = NULL;
-        proverka8 = NULL;
+        proverka7 = nullptr;
+        proverka8 = nullptr;
 
         //1
         m_ListProverkaItem->append(proverka1); // Дописать код для спрашивания имени у приемника
@@ -334,7 +334,7 @@ void Proverka::process_start()
         proverka5 = new proverkaItem(5,n6700_2,gsg,port5,false, false,"ЛЖ0005",screenClass);
         proverka6 = new proverkaItem(6,n6700_2,gsg,port6,false, false,"ЛЖ0006",screenClass);
         proverka7 = new proverkaItem(7,n6700_2,gsg,port7,false, false,"ЛЖ0007",screenClass);
-        proverka8 = NULL;
+        proverka8 = nullptr;
 
         //1
         m_ListProverkaItem->append(proverka1); // Дописать код для спрашивания имени у приемника
@@ -4192,7 +4192,7 @@ void Proverka::slot_EndProverka(int index)
     case 6:
         for(int i=0;i <Count_NP;i++)
         {
-            proverkaItem* flag = (proverkaItem*)m_ListProverkaItem->value(i);
+            proverkaItem* flag = dynamic_cast<proverkaItem*>(m_ListProverkaItem->value(i));
 
             if( flag->relizProverka->job == false)
             {
@@ -4201,7 +4201,9 @@ void Proverka::slot_EndProverka(int index)
                 if(flag->relizProverka->flag_good_6)
                 {
                     flag->relizProverkaTimer->signal_GoodQML(true,flag->relizProverkaTimer->index);
+
                     qDebug () << "Вызов переключения: " << QString::number(index);
+
                     emit signal_GoodQML(QString::number(index));
                 }
                 else
@@ -4225,24 +4227,19 @@ void Proverka::slot_EndProverka(int index)
             proverkaItem* flag;
 
 
-            //  emit signal_GoodQML(proverka1->relizProverka->countProverka);
             start = 0 ;
 
             for(int i=0;i <Count_NP;i++)
             {
-                flag = (proverkaItem*)m_ListProverkaItem->value(i);
-
+                flag =dynamic_cast<proverkaItem*>(m_ListProverkaItem->value(i));
                 flag->relizProverka->job = true;
-
             }
 
-            if(flag->relizProverka->flag_auto == false)
+            if(flag->relizProverka->flag_auto == false && flag->relizProverka->flag_300MGH_6Proverka == true)
             {
                 endOneProverka();
-
             }
 
-            //  emit signal_Next();
         }
         else
         {
@@ -4254,7 +4251,7 @@ void Proverka::slot_EndProverka(int index)
     case 7:
         for(int i=0;i <Count_NP;i++)
         {
-            proverkaItem* flag = (proverkaItem*)m_ListProverkaItem->value(i);
+            proverkaItem* flag = dynamic_cast<proverkaItem*>(m_ListProverkaItem->value(i));
 
 
             if( flag->relizProverka->job == false)
@@ -4716,8 +4713,6 @@ void Proverka::slot_start_10Proverka_OS(int index)
     }
 
     signalsCount = 0;
-    gsg->tp->slot_clear();
-
 
 
     switch (index) {

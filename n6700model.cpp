@@ -7,9 +7,7 @@ N6700Model::N6700Model(QObject *parent) : QObject(parent),
     item4(new ItemIstochnik)
 {
 
-    qDebug () << "N6700Model* N6700 : create (new)";
     n6700 = new N6700();
-    qDebug () << "N6700Model* N6700 = " << sizeof(n6700);
 
     //Соединение
     QObject::connect(this,&N6700Model::connectDevice,n6700,&N6700::Connect,Qt::QueuedConnection);
@@ -44,6 +42,16 @@ N6700Model::N6700Model(QObject *parent) : QObject(parent),
 
    // qRegisterMetaType<QString,bool>();
 
+}
+
+N6700Model::~N6700Model()
+{
+    delete item1;
+    delete item2;
+    delete item3;
+    delete item4;
+
+    delete n6700;
 }
 
 const QString &N6700Model::name() const
