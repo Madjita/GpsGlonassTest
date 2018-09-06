@@ -21,21 +21,6 @@ struct Settings
 };
 
 
-//Структура с данными
-//#pragma pack(push, 1)
-//struct frameExample
-//{
-
-//    byte NkaLit[24];  // Номер Литиры
-//    byte NkaNum[24];  // Номер НКА
-//    byte Ka1Mode[24]; // Режим КА1
-////    byte Ka2Mode[24]; // Режим КА2
-//    __int16 A1L1[24]; // Амплиуда
-
-//};
-//#pragma pack(pop)
-
-
 #pragma pack(push, 1)
 struct amplituda
 {
@@ -91,7 +76,7 @@ class Port : public QObject
     Q_OBJECT
 
 public:
-    explicit Port(QObject *parent = 0);
+    explicit Port(QObject *parent = nullptr);
 
     //Инициализация таймеров
     QTimer* timer_MRK_Data;
@@ -104,6 +89,7 @@ public:
     bool flag_end_MRK;
 
     QByteArray dataBuild;
+    QByteArray nameMRK;
 
     bool flag_GetMrk_liters = false;
 
@@ -187,6 +173,10 @@ public slots:
     void GetMrk_OT();
     void GetMrk_liters(int);
     void GetMrk_liters_2(int);
+
+    void GetMrk_Name();
+
+
     void END();
     void Work();
 
@@ -195,6 +185,7 @@ public slots:
 private slots:
     void handleError(QSerialPort::SerialPortError error); // Слот обработки ошибок
     void ReadInProt(); //Слот чтения из порта по ReadyRead
+    void ReadInProt_nameNP101(QByteArray _nameMRK); //Слот чтения из порта по ReadyRead имя приемника
 
     int RecvByte(unsigned char ch);
 

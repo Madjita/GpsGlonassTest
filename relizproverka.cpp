@@ -751,8 +751,8 @@ void RelizProverka::proverka_rabotosposobnosti_Ponijennoe_naprRjenie_NP_ID_4()
 
     if(flag_auto)
     {
-       // proverka_rabotosposobnosti_Ponijennoe_naprRjenie_NP_ID_6();
-        proverka_rabotosposobnosti_Ponijennoe_naprRjenie_NP_ID_5();
+       proverka_rabotosposobnosti_Ponijennoe_naprRjenie_NP_ID_6();
+       // proverka_rabotosposobnosti_Ponijennoe_naprRjenie_NP_ID_5();
     }
 
 }
@@ -889,8 +889,6 @@ void RelizProverka::proverka_rabotosposobnosti_Ponijennoe_naprRjenie_NP_ID_5()
     }
 
     emit signal_IndexProverka(QString::number(countProverka));
-
-
 
 
     if(flag_auto)

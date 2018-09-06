@@ -593,12 +593,7 @@ void Page2_ConnectDevice::slot_coonnectOK_port8(bool ok)
 
 void Page2_ConnectDevice::on_pushButton_Work_clicked()
 {
-
-
     emit startAutoWork();
-
-
-
 }
 
 void Page2_ConnectDevice::on_pushButton_Result_clicked()

@@ -68,7 +68,6 @@ void Proverka::process_start()
 {
 
     ////////////////////////////////////////////////////////////////////////////
-
     m_ListProverkaItem->clear();
     res.clear();
 
@@ -81,15 +80,16 @@ void Proverka::process_start()
     proverka7 = nullptr;
     proverka8 = nullptr;
 
-    Count_NP = list_CountNP.count();
+    Count_NP = list_CountNP.count(); // количество найденных приемников в пульте ТП-НП101
 
-    //посмотреть решение проблемы с отображением на жэкране определенных приборов к примеру 3 и 5 или 2 и 3 или 1 и 3
+    //посмотреть решение проблемы с отображением на экране определенных приборов к примеру 3 и 5 или 2 и 3 или 1 и 3
     for(int i=0; i < list_CountNP.count();i++)
     {
         switch (list_CountNP.value(i).toInt())
         {
         case 1:
         {
+            //port->PortNew->nameMRK
             proverka1 = new proverkaItem(1,n6700,gsg,port,false, false,"ЛЖ0001",screenClass);
             m_ListProverkaItem->append(proverka1); // Дописать код для спрашивания имени у приемника
             res.append(m_ListProverkaItem->last());
@@ -416,10 +416,9 @@ void Proverka::process_start()
     */
 
 
-    for(int i=0;i <Count_NP;i++) //for(int i=0;i <2;i++)
+    for(int i=0;i <Count_NP;i++)
     {
-
-        list.append((proverkaItem*)m_ListProverkaItem->value(i));
+        list.append(dynamic_cast<proverkaItem*>(m_ListProverkaItem->value(i)));
     }
 
 
@@ -717,7 +716,7 @@ void Proverka::process_start()
     }
 
 
-    ListProverkaChanged(res);
+    emit ListProverkaChanged(res);
 
 
 }
@@ -1184,9 +1183,7 @@ void Proverka::slot_StartProverka()
             if(str.value(i) == "ЛЖ0001")
             {
                 proverka_kolNP++;
-
                 idSerial.append(SQL_Etap->data(SQL_Etap->index(i,0), Qt::EditRole).toString());
-
             }
             break;
         }
@@ -1195,9 +1192,7 @@ void Proverka::slot_StartProverka()
             if(str.value(i) == "ЛЖ0001" || str.value(i) == "ЛЖ0002")
             {
                 proverka_kolNP++;
-
                 idSerial.append(SQL_Etap->data(SQL_Etap->index(i,0), Qt::EditRole).toString());
-
             }
             break;
         }
@@ -1206,9 +1201,7 @@ void Proverka::slot_StartProverka()
             if(str.value(i) == "ЛЖ0001" || str.value(i) == "ЛЖ0002" || str.value(i) == "ЛЖ0003")
             {
                 proverka_kolNP++;
-
                 idSerial.append(SQL_Etap->data(SQL_Etap->index(i,0), Qt::EditRole).toString());
-
             }
             break;
         }
@@ -1217,9 +1210,7 @@ void Proverka::slot_StartProverka()
             if(str.value(i) == "ЛЖ0001" || str.value(i) == "ЛЖ0002" || str.value(i) == "ЛЖ0003" || str.value(i) == "ЛЖ0004")
             {
                 proverka_kolNP++;
-
                 idSerial.append(SQL_Etap->data(SQL_Etap->index(i,0), Qt::EditRole).toString());
-
             }
             break;
         }
@@ -1228,9 +1219,7 @@ void Proverka::slot_StartProverka()
             if(str.value(i) == "ЛЖ0001" || str.value(i) == "ЛЖ0002" || str.value(i) == "ЛЖ0003" || str.value(i) == "ЛЖ0004" || str.value(i) == "ЛЖ0005")
             {
                 proverka_kolNP++;
-
                 idSerial.append(SQL_Etap->data(SQL_Etap->index(i,0), Qt::EditRole).toString());
-
             }
             break;
         }
@@ -1241,9 +1230,7 @@ void Proverka::slot_StartProverka()
                     || str.value(i) == "ЛЖ0005" || str.value(i) == "ЛЖ0006")
             {
                 proverka_kolNP++;
-
                 idSerial.append(SQL_Etap->data(SQL_Etap->index(i,0), Qt::EditRole).toString());
-
             }
             break;
         }
@@ -1254,9 +1241,7 @@ void Proverka::slot_StartProverka()
                     || str.value(i) == "ЛЖ0005" || str.value(i) == "ЛЖ0006" || str.value(i) == "ЛЖ0007")
             {
                 proverka_kolNP++;
-
                 idSerial.append(SQL_Etap->data(SQL_Etap->index(i,0), Qt::EditRole).toString());
-
             }
             break;
         }
@@ -1267,9 +1252,7 @@ void Proverka::slot_StartProverka()
                     || str.value(i) == "ЛЖ0005" || str.value(i) == "ЛЖ0006" || str.value(i) == "ЛЖ0007" || str.value(i) == "ЛЖ0008")
             {
                 proverka_kolNP++;
-
                 idSerial.append(SQL_Etap->data(SQL_Etap->index(i,0), Qt::EditRole).toString());
-
             }
             break;
         }
@@ -1297,7 +1280,7 @@ void Proverka::slot_StartProverka()
 
     idLink.clear();
 
-    //подсчит количества стартов
+    //подсчёт количества стартов
     kol_Auto_Start++;
 
 
@@ -3615,7 +3598,6 @@ void Proverka::SetBD(BData *bd)
 {
     BD = bd;
 
-
 }
 
 
@@ -3639,7 +3621,7 @@ void Proverka::slot_EndProverka(int index)
 
         for(int i=0;i <Count_NP;i++) // for(int i=0;i <2;i++)
         {
-            proverkaItem* flag = (proverkaItem*)m_ListProverkaItem->value(i);
+            proverkaItem* flag = dynamic_cast<proverkaItem*>(m_ListProverkaItem->value(i));
 
 
             if( flag->relizProverka->job == false)
@@ -3675,7 +3657,7 @@ void Proverka::slot_EndProverka(int index)
         }
 
         signalsCount = 0;
-        gsg->tp->slot_clear();
+
 
 
         if(start <= 0)
@@ -3686,7 +3668,7 @@ void Proverka::slot_EndProverka(int index)
 
             for(int i=0;i <Count_NP;i++)
             {
-                flag = (proverkaItem*)m_ListProverkaItem->value(i);
+                flag = dynamic_cast<proverkaItem*>(m_ListProverkaItem->value(i));
 
                 flag->relizProverka->job  = true;
 
@@ -3708,13 +3690,16 @@ void Proverka::slot_EndProverka(int index)
 
             if(flag->relizProverka->flag_auto == false)
             {
-                endOneProverka();
 
+                endOneProverka();
                 emit signal_StartProverka_2();
                 break;
             }
-
-            emit signal_StartProverka_2();
+            else
+            {
+                gsg->tp->slot_clear();
+                emit signal_StartProverka_2();
+            }
 
         }
         else
@@ -3728,7 +3713,7 @@ void Proverka::slot_EndProverka(int index)
 
         for(int i=0;i <Count_NP;i++)
         {
-            proverkaItem* flag = (proverkaItem*)m_ListProverkaItem->value(i);
+            proverkaItem* flag = dynamic_cast<proverkaItem*>(m_ListProverkaItem->value(i));
 
 
             if( flag->relizProverka->job == false)
@@ -3785,7 +3770,7 @@ void Proverka::slot_EndProverka(int index)
             break;
         }
         signalsCount = 0;
-        gsg->tp->slot_clear();
+
 
 
         if(start <=0)
@@ -3798,7 +3783,7 @@ void Proverka::slot_EndProverka(int index)
 
             for(int i=0;i <Count_NP;i++)
             {
-                flag = (proverkaItem*)m_ListProverkaItem->value(i);
+                flag = dynamic_cast<proverkaItem*>(m_ListProverkaItem->value(i));
 
                 flag->relizProverka->job = true;
 
@@ -3812,9 +3797,14 @@ void Proverka::slot_EndProverka(int index)
                 emit signal_StartProverka_2();
                 break;
             }
+            else
+            {
+                gsg->tp->slot_clear();
+                emit signal_StartProverka_2();
+            }
 
 
-            emit signal_StartProverka_2();
+
         }
         else
         {
@@ -3826,7 +3816,7 @@ void Proverka::slot_EndProverka(int index)
 
         for(int i=0;i <Count_NP;i++)
         {
-            proverkaItem* flag = (proverkaItem*)m_ListProverkaItem->value(i);
+            proverkaItem* flag = dynamic_cast<proverkaItem*>(m_ListProverkaItem->value(i));
 
 
             if( flag->relizProverka->job == false)
@@ -3876,7 +3866,7 @@ void Proverka::slot_EndProverka(int index)
             break;
         }
         signalsCount = 0;
-        gsg->tp->slot_clear();
+
 
         if(start <=0)
         {
@@ -3888,7 +3878,7 @@ void Proverka::slot_EndProverka(int index)
 
             for(int i=0;i <Count_NP;i++)
             {
-                flag = (proverkaItem*)m_ListProverkaItem->value(i);
+                flag = dynamic_cast<proverkaItem*>(m_ListProverkaItem->value(i));
 
                 flag->relizProverka->job = true;
 
@@ -3902,8 +3892,13 @@ void Proverka::slot_EndProverka(int index)
                 break;
 
             }
+            else
+            {
+                 gsg->tp->slot_clear();
+                 emit signal_StartProverka_2();
+            }
 
-            emit signal_StartProverka_2();
+
 
         }
         else
@@ -3914,7 +3909,7 @@ void Proverka::slot_EndProverka(int index)
     case 4:
         for(int i=0;i <Count_NP;i++)
         {
-            proverkaItem* flag = (proverkaItem*)m_ListProverkaItem->value(i);
+            proverkaItem* flag = dynamic_cast<proverkaItem*>(m_ListProverkaItem->value(i));
 
 
             if( flag->relizProverka->job == false)
@@ -3947,7 +3942,7 @@ void Proverka::slot_EndProverka(int index)
             break;
         }
         signalsCount = 0;
-        gsg->tp->slot_clear();
+
 
         if(start <=0)
         {
@@ -3963,7 +3958,7 @@ void Proverka::slot_EndProverka(int index)
             start = 0 ;
             for(int i=0;i <Count_NP;i++)
             {
-                flag = (proverkaItem*)m_ListProverkaItem->value(i);
+                flag = dynamic_cast<proverkaItem*>(m_ListProverkaItem->value(i));
 
                 flag->relizProverka->job = true;
 
@@ -3972,10 +3967,14 @@ void Proverka::slot_EndProverka(int index)
             if(flag->relizProverka->flag_auto == false)
             {
                 endOneProverka();
-
+            }
+            else
+            {
+                 gsg->tp->slot_clear();
+                 emit signal_StartProverka_5();
             }
 
-            emit signal_StartProverka_5();
+
         }
         else
         {
@@ -3985,7 +3984,7 @@ void Proverka::slot_EndProverka(int index)
     case 5:
         for(int i=0;i <Count_NP;i++)
         {
-            proverkaItem* flag = (proverkaItem*)m_ListProverkaItem->value(i);
+            proverkaItem* flag = dynamic_cast<proverkaItem*>(m_ListProverkaItem->value(i));
 
 
             if( flag->relizProverka->job == false)
@@ -4006,7 +4005,7 @@ void Proverka::slot_EndProverka(int index)
         }
 
         signalsCount = 0;
-        gsg->tp->slot_clear();
+
 
         if(start <=0)
         {
@@ -4018,12 +4017,13 @@ void Proverka::slot_EndProverka(int index)
             emit signal_Gen_setCONTrol("STOP");
 
 
+
             proverkaItem* flag = nullptr;
 
             start = 0 ;
             for(int i=0;i <Count_NP;i++)
             {
-                flag = (proverkaItem*)m_ListProverkaItem->value(i);
+                flag = dynamic_cast<proverkaItem*>(m_ListProverkaItem->value(i));
 
                 flag->relizProverka->job = true;
 
@@ -4049,6 +4049,7 @@ void Proverka::slot_EndProverka(int index)
                         }
                         else
                         {
+                            gsg->tp->slot_clear();
                             emit signal_StartProverka_5();
                         }
 
@@ -4060,10 +4061,12 @@ void Proverka::slot_EndProverka(int index)
                     {
                         if(autoProverka == false)
                         {
+
                             endOneProverka(); // no
                         }
                         else
                         {
+                            gsg->tp->slot_clear();
                             emit signal_StartProverka_5();
                         }
 
@@ -4173,7 +4176,6 @@ void Proverka::slot_EndProverka(int index)
             else
             {
                 emit signal_Gen_setCONTrol("START");
-
                 emit signal_StartProverka_5();
             }
 
@@ -4239,6 +4241,10 @@ void Proverka::slot_EndProverka(int index)
             {
                 endOneProverka();
             }
+            else
+            {
+                gsg->tp->slot_clear();
+            }
 
         }
         else
@@ -4289,7 +4295,7 @@ void Proverka::slot_EndProverka(int index)
             start = 0 ;
             for(int i=0;i <Count_NP;i++)
             {
-                flag = (proverkaItem*)m_ListProverkaItem->value(i);
+                flag = dynamic_cast<proverkaItem*>(m_ListProverkaItem->value(i));
 
                 flag->relizProverka->job = true;
 
@@ -4299,11 +4305,11 @@ void Proverka::slot_EndProverka(int index)
             if(flag->relizProverka->flag_auto == false)
             {
                 endOneProverka();
-
                 emit signal_StartProverka_5();
             }
             else
             {
+                gsg->tp->slot_clear();
                 // emit signal_Next();
 
                 //emit signal_StartProverka_5();
@@ -4321,7 +4327,7 @@ void Proverka::slot_EndProverka(int index)
     case 8:
         for(int i=0;i <Count_NP;i++)
         {
-            proverkaItem* flag = (proverkaItem*)m_ListProverkaItem->value(i);
+            proverkaItem* flag = dynamic_cast<proverkaItem*>(m_ListProverkaItem->value(i));
 
 
             if( flag->relizProverka->job == false)
@@ -4368,7 +4374,7 @@ void Proverka::slot_EndProverka(int index)
             start = 0 ;
             for(int i=0;i <Count_NP;i++)
             {
-                flag = (proverkaItem*)m_ListProverkaItem->value(i);
+                flag = dynamic_cast<proverkaItem*>(m_ListProverkaItem->value(i));
 
                 flag->relizProverka->job = true;
 
@@ -4378,12 +4384,12 @@ void Proverka::slot_EndProverka(int index)
             if(flag->relizProverka->flag_auto == false)
             {
                 endOneProverka();
-
                 emit signal_StartProverka_5();
 
             }
             else
             {
+                 gsg->tp->slot_clear();
                 // emit signal_Next();
 
                 //emit signal_StartProverka_5();
@@ -4403,7 +4409,7 @@ void Proverka::slot_EndProverka(int index)
     case 9:
         for(int i=0;i <Count_NP;i++)
         {
-            proverkaItem* flag = (proverkaItem*)m_ListProverkaItem->value(i);
+            proverkaItem* flag = dynamic_cast<proverkaItem*>(m_ListProverkaItem->value(i));
 
             if( flag->relizProverka->job == false)
             {
@@ -4439,7 +4445,7 @@ void Proverka::slot_EndProverka(int index)
 
             for(int i=0;i <Count_NP;i++)
             {
-                flag = (proverkaItem*)m_ListProverkaItem->value(i);
+                flag = dynamic_cast<proverkaItem*>(m_ListProverkaItem->value(i));
                 flag->relizProverka->job = true;
 
 
@@ -4449,9 +4455,11 @@ void Proverka::slot_EndProverka(int index)
             if(flag->relizProverka->flag_auto == false)
             {
                 endOneProverka();
-
                 emit signal_StartProverka_5();
-
+            }
+            else
+            {
+                gsg->tp->slot_clear();
             }
 
             // emit signal_Next();
@@ -4469,7 +4477,7 @@ void Proverka::slot_EndProverka(int index)
     case 10:
         for(int i=0;i <Count_NP;i++)
         {
-            proverkaItem* flag = (proverkaItem*)m_ListProverkaItem->value(i);
+            proverkaItem* flag = dynamic_cast<proverkaItem*>(m_ListProverkaItem->value(i));
 
 
             if( flag->relizProverka->job == false)
@@ -4502,7 +4510,7 @@ void Proverka::slot_EndProverka(int index)
         }
 
         signalsCount = 0;
-        gsg->tp->slot_clear();
+
 
         if(start <=0)
         {
@@ -4520,7 +4528,7 @@ void Proverka::slot_EndProverka(int index)
 
             for(int i=0;i <Count_NP;i++)
             {
-                flag = (proverkaItem*)m_ListProverkaItem->value(i);
+                flag = dynamic_cast<proverkaItem*>(m_ListProverkaItem->value(i));
                 flag->relizProverka->job = true;
 
 
@@ -4539,6 +4547,8 @@ void Proverka::slot_EndProverka(int index)
 
                 //WARNING
                 //Дописать код обнуления информации на странице
+
+                gsg->tp->slot_clear();
 
                 emit signal_clearView();
 
@@ -4566,7 +4576,6 @@ void Proverka::slot_EndProverka(int index)
                 case 5:
                 {
                     emit signal_Finish();
-                    qDebug() << "Finish";
 
                     emit signal_stopCamberWorkProverka();
 
@@ -4617,11 +4626,11 @@ void Proverka::slot_start_GEN()
         return;
     }
 
-    proverkaItem* flag2 = (proverkaItem*)m_ListProverkaItem->value(0);
+    proverkaItem* flag2 = dynamic_cast<proverkaItem*>(m_ListProverkaItem->value(0));
 
     for(int i=0;i <Count_NP;i++)
     {
-        proverkaItem* flag = (proverkaItem*)m_ListProverkaItem->value(i);
+        proverkaItem* flag = dynamic_cast<proverkaItem*>(m_ListProverkaItem->value(i));
 
 
         if( flag->relizProverka->job == false)
@@ -4630,7 +4639,7 @@ void Proverka::slot_start_GEN()
         }
         else
         {
-            flag2 = (proverkaItem*)m_ListProverkaItem->value(i);
+            flag2 = dynamic_cast<proverkaItem*>(m_ListProverkaItem->value(i));
         }
 
         start++;

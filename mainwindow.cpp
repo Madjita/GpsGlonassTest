@@ -713,13 +713,10 @@ void MainWindow::openWindowWorkNP(int index)
 
 void MainWindow::initializate_proverka()
 {
-    // нужно запустить поиск количества спутников.
+    // нужно запустить поиск количества приемников.
 
     if((page2_ConnectDevice->n6700_1 != nullptr))
     {
-
-
-
 
         if(page2_ConnectDevice->n6700_1->n6700->connected == true)
         {
@@ -729,8 +726,6 @@ void MainWindow::initializate_proverka()
             }
 
             page2_ConnectDevice->n6700_1->n6700->setOutput("ALL",true);
-
-
         }
 
     }
@@ -746,10 +741,8 @@ void MainWindow::initializate_proverka()
                 page2_ConnectDevice->n6700_2->slot_StopTimer();
             }
 
-
             page2_ConnectDevice->n6700_2->n6700->setOutput("ALL",true);
         }
-
     }
 
 
@@ -759,7 +752,6 @@ void MainWindow::initializate_proverka()
     QVector<QString> listFind_I =  page2_ConnectDevice->n6700_1->n6700->getMeasureCURRentALL_find();
 
     listFind_I =  page2_ConnectDevice->n6700_1->n6700->getMeasureCURRentALL_find();
-
     listFind_I =  page2_ConnectDevice->n6700_1->n6700->getMeasureCURRentALL_find();
 
 
@@ -770,14 +762,27 @@ void MainWindow::initializate_proverka()
         if(listFind_I.value(i).toDouble() > 0.01)
         {
             list.append(QString::number(i+1));
+
+            switch (i+1) {
+            case 1:
+                page2_ConnectDevice->port1->PortNew->GetMrk_Name();
+                break;
+            case 2:
+                page2_ConnectDevice->port2->PortNew->GetMrk_Name();
+                break;
+            case 3:
+                page2_ConnectDevice->port3->PortNew->GetMrk_Name();
+                break;
+            case 4:
+                page2_ConnectDevice->port4->PortNew->GetMrk_Name();
+                break;
+            }
+
         }
     }
 
 
     listFind_I =  page2_ConnectDevice->n6700_2->n6700->getMeasureCURRentALL_find();
-
-    listFind_I =  page2_ConnectDevice->n6700_2->n6700->getMeasureCURRentALL_find();
-
     listFind_I =  page2_ConnectDevice->n6700_2->n6700->getMeasureCURRentALL_find();
 
 
@@ -786,37 +791,46 @@ void MainWindow::initializate_proverka()
         if(listFind_I.value(i).toDouble() > 0.1)
         {
             list.append(QString::number(i+5));
+
+            switch (i+5) {
+            case 5:
+                page2_ConnectDevice->port5->PortNew->GetMrk_Name();
+                break;
+            case 6:
+                page2_ConnectDevice->port6->PortNew->GetMrk_Name();
+                break;
+            case 7:
+                page2_ConnectDevice->port7->PortNew->GetMrk_Name();
+                break;
+            case 8:
+                page2_ConnectDevice->port8->PortNew->GetMrk_Name();
+                break;
+            }
         }
     }
 
     qDebug () << list;
 
-
     if((page2_ConnectDevice->n6700_1 != nullptr))
     {
-
         if(page2_ConnectDevice->n6700_1->n6700->connected == true)
         {
             page2_ConnectDevice->n6700_1->n6700->setOutput("ALL",false);
         }
-
     }
 
     if((page2_ConnectDevice->n6700_2 != nullptr))
     {
-
         if(page2_ConnectDevice->n6700_2->n6700->connected == true)
         {
             page2_ConnectDevice->n6700_2->n6700->setOutput("ALL",false);
         }
-
     }
 
 
+    page2_ConnectDevice->proverka->list_CountNP = list; //найденные приемники в пульте
 
-    page2_ConnectDevice->proverka->list_CountNP = list;
-
-    page2_ConnectDevice->proverka->process_start();
+    page2_ConnectDevice->proverka->process_start(); // заупстить инициализации проверок
 
 
 
@@ -883,6 +897,9 @@ void MainWindow::initializate_proverka()
 void MainWindow::slot_startAutoWork()
 {
     initializate_proverka();
+
+
+    this->thread()->msleep(100);
 
     emit startAutoWork();
 }
